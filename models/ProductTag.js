@@ -35,3 +35,4 @@ tag_id: {
 }
 
 });
+module.exports = ProductTag
