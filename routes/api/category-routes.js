@@ -5,10 +5,12 @@ const { Category, Product } = require('../../models');
 // The `/api/categories` endpoint
 
 router.get('/', async (req, res) => {
+  console.log('line 8 hit');
   try {
-    const allCat = await Category.find({
+    const allCat = await Category.findAll({
       include: [{ model: Product }]
     })
+    console.log(allCat)
     res.status(200).json(allCat)
   } catch (err) {
     res.status(500).json(err)
