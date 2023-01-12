@@ -6,9 +6,9 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', async (req, res) => {
   try {
-    const allProducts = await Product(find({
-      include: [{ model: Category }, { model: Tag }]
-    }))
+    const allProducts = await Product.findAll({
+    include: [{ model: Category }, { model: Tag }]
+    })
     res.status(200).json(allProducts)
   } catch (err) {
     res.status(500).json(err)
@@ -24,6 +24,7 @@ router.get('/:id', async (req, res) => {
       include: [{ model: Category }, { model: Tag }]
     })
     res.status(200).json(findProduct)
+    return; //added not tested
   } catch (err) {
     res.status(500).json(err)
   }
@@ -35,15 +36,14 @@ router.get('/:id', async (req, res) => {
   // create new product
   router.post('/', async (req, res) => {
     try {
-      const createProd = await Product.create({
-        category_id: req.body.category_id
-      });
+      const createProd = await Product.create(req.body);
       res.status(200).json(createProd);
+      return
     } catch (err){
       res.status(400).json(err);
     }
     /* req.body should look like this...
-      {???????????????????????????????????????????????????????
+      {
         product_name: "Basketball",
         price: 200.00,
         stock: 3,
@@ -79,6 +79,7 @@ router.get('/:id', async (req, res) => {
       where: {
         id: req.params.id,
       },
+ 
     })
       .then((product) => {
         // find all associated tags from ProductTag
@@ -114,7 +115,22 @@ router.get('/:id', async (req, res) => {
       });
   });
 
-  router.delete('/:id', (req, res) => {
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleteProd = await Product.destroy({
+        where: {
+          id: req.params.id
+        },
+      });
+  
+      if (!deleteProd) {
+        res.status(404).json({ message: 'No Product found with that id!' });
+        return;
+      }
+      res.status(200).json(deleteProd)
+    } catch (err) {
+      res.status(500).json(err)
+    }
     // delete one product by its `id` value
   });
 

@@ -6,7 +6,10 @@ const { Tag, Product, ProductTag } = require('../../models');
 router.get('/', async (req, res) => {
   try {
     const allTags = await Tag.findAll({
-      include: [{model: Product }]
+      include: [{
+        model: Product,  
+        attributes: ['product_name']
+      }]
     })
     res.status(200).json(allTags)
   } catch (err){
@@ -32,19 +35,22 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try{
   const newTag = await Tag.create({
-    tag_name: req.body.category_name,
+    tag_name: req.body.tag_name
+    //{TagName}
   })
+  res.status(200).json(newTag);
 } catch (err){
   res.status(400).json(err);
 }
   // create a new tag
 });
-
+"/api/tag/790"
 router.put('/:id', async(req, res) => {
   try {
     const updateTag = await Tag.update(req.body, {
       where: {
         id: req.params.id,
+        //{stock: 56}
       },
     });
     if(!updateTag[0]){

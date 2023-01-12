@@ -40,8 +40,8 @@ Product.init(
       references: {
         model: 'category',
         key: 'id',
+        onDelete: 'SET NULL',
       },
-      onDelete: 'SET NULL',
       allowNull: true
 
     }

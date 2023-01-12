@@ -5,10 +5,12 @@ const { Category, Product } = require('../../models');
 // The `/api/categories` endpoint
 
 router.get('/', async (req, res) => {
-  console.log('line 8 hit');
+  //console.log('line 8 hit');
   try {
     const allCat = await Category.findAll({
-      include: [{ model: Product }]
+      include: [
+        { model: Product,
+        attributes: ['product_name'] }]
     })
     console.log(allCat)
     res.status(200).json(allCat)
@@ -22,9 +24,12 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const findCat = await Category.findByPk(req.params.id, {
-      include: [{ model: Product }]
+      include: [
+        { model: Product,
+        attributes: ['product_name'] }]
     })
     res.status(200).json(findCat)
+    return;
   } catch (err) {
     res.status(500).json(err)
   }
@@ -36,10 +41,12 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new category
   try {
-    const newCat = await Category.create({
-      category_name: res.body.category_name,
-    });
+    const newCat = await Category.create(
+      req.body
 
+    );
+    res.status(200).json(newCat)
+    return
 
   } catch (err) {
     res.status(400).json(err);
@@ -54,10 +61,11 @@ router.put('/:id', async (req, res) => {
       },
     });
     if (!updateCat[0]) {
+      console.log('Hit Create Category Route')
       res.status(404).json({ message: 'No Category with this id!' });
       return;
     }
-    res.status(200).json(updateCat);
+    res.status(200).json('Name Changed');
   } catch (err) {
     res.status(500).json(err);
   }
