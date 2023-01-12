@@ -39,8 +39,10 @@ Product.init(
       type: DataTypes.INTEGER,
       references: {
         model: 'category',
-        key: 'id'
-      }
+        key: 'id',
+      },
+      onDelete: 'SET NULL',
+      allowNull: true
 
     }
     // define columns

@@ -15,6 +15,7 @@ Category.init(
     category_name: {
       type: DataTypes.STRING,
       allowNull: false,
+      onDelete: "SET NULL"
     },
     // define columns
   },

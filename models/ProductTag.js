@@ -22,16 +22,18 @@ ProductTag.init(
             references: {
                 model: 'product',
                 key: 'id',
-
+                onDelete: "SET NULL"
             },
+                allowNull: true
         },
         tag_id: {
             type: DataTypes.INTEGER,
             references: {
                 model: 'tag',
                 key: 'id',
-            }
-
+                onDelete: 'SET NULL'
+            },
+            allowNull: true
         },  
     },
     {
